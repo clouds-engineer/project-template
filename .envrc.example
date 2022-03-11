@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+WORKDIR="$(pwd -P)"
+
+################################################################################################# AWS credentials
+# AWS Cli env values
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+export AWS_DEFAULT_REGION=
+export AWS_ACOUNT_ID=
+
+################################################################################################# GCP credentials
+# GCP gcloud Cli env values
+# CLOUDSDK_SECTION_NAME_PROPERTY_NAME
+export CLOUDSDK_ACTIVE_CONFIG_NAME=
+export CLOUDSDK_CORE_ACCOUNT=
+export CLOUDSDK_CORE_PROJECT=
+export CLOUDSDK_CORE_DISABLE_USAGE_REPORTING=True
+export CLOUDSDK_COMPUTE_REGION=
+export CLOUDSDK_COMPUTE_ZONE=
+
+################################################################################################# Azure credentials
+# Azure cli env values
+# AZURE_{section}_{name},
+# https://docs.microsoft.com/en-us/cli/azure/azure-cli-configuration
+export AZURE_COLLECT_TELEMETRY=false
+export AZURE_DEFAULTS_LOCATION=
+export AZURE_DEFAULTS_GROUPS=
+export AZURE_DEFAULTS_ACR=
+
+################################################################################################# Kubernetes
+# Kubernetes
+## Append `:$HOME/.kube/config:$KUBECONFIG` to KUBECONFIG if you want global access
+export KUBECONFIG=$WORKDIR/.kube.config
+
+################################################################################################# Tool required
+if [ -f ".tool-versions" ] && [ -x "$(command -v asdf)" ]; then
+    asdf install
+    asdf current
+fi
+
+################################################################################################# Aliases
+# -F configfile
+alias ssh='ssh -F $WORKDIR/.ssh/config'

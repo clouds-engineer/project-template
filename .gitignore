@@ -1,0 +1,19 @@
+# Project wide SSH config/keys etc
+.ssh/**
+!.ssh/.gitkeep
+!.ssh/config
+
+# Project wide credentials etc
+.vault/**
+!.vault/.gitkeep
+
+# Project wide source code repositories
+src/**
+!src/.gitkeep
+
+# Temporary files
+tmp
+
+# Environment value files
+.envrc
+.env
