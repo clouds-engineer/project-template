@@ -1,43 +1,93 @@
 #!/usr/bin/env bash
+########################################### shell options
+set -e
+########################################### Global env variables
 WORKDIR="$(pwd -P)"
+PATH="$WORKDIR"/"**"/"bin":"$WORKDIR"/"**"/".bin":"$PATH"
+########################################### Project related
+PROJECT_TEMPLATE_REPO="git@github.com:leventogut/project-template.git"
+PROJECT_NAME=${PROJECT_NAME:-"myproject"}
+PROJECT_DIR=$PROJECT_NAME
 
-################################################################################################# AWS credentials
-# AWS Cli env values
-export AWS_ACCESS_KEY_ID=
-export AWS_SECRET_ACCESS_KEY=
-export AWS_DEFAULT_REGION=
-export AWS_ACOUNT_ID=
+if [ -d "$PROJECT_DIR" ]; then
+    mv "$PROJECT_DIR" "${PROJECT_DIR}.previous"
+fi
+git clone --depth=1 "$PROJECT_TEMPLATE_REPO" "$PROJECT_DIR"
 
-################################################################################################# GCP credentials
-# GCP gcloud Cli env values
-# CLOUDSDK_SECTION_NAME_PROPERTY_NAME
-export CLOUDSDK_ACTIVE_CONFIG_NAME=
-export CLOUDSDK_CORE_ACCOUNT=
-export CLOUDSDK_CORE_PROJECT=
-export CLOUDSDK_CORE_DISABLE_USAGE_REPORTING=True
-export CLOUDSDK_COMPUTE_REGION=
-export CLOUDSDK_COMPUTE_ZONE=
-
-################################################################################################# Azure credentials
-# Azure cli env values
-# AZURE_{section}_{name},
-# https://docs.microsoft.com/en-us/cli/azure/azure-cli-configuration
-export AZURE_COLLECT_TELEMETRY=false
-export AZURE_DEFAULTS_LOCATION=
-export AZURE_DEFAULTS_GROUPS=
-export AZURE_DEFAULTS_ACR=
-
-################################################################################################# Kubernetes
-# Kubernetes
-## Append `:$HOME/.kube/config:$KUBECONFIG` to KUBECONFIG if you want global access
-export KUBECONFIG=$WORKDIR/.kube.config
-
-################################################################################################# Tool required
-if [ -f ".tool-versions" ] && [ -x "$(command -v asdf)" ]; then
-    asdf install
-    asdf current
+########################################### Provider Credentials
+if [ "$AWS" -eq 1 ]; then
+    ####################################### AWS credentials
+    # AWS Cli env values
+    export AWS_ACOUNT_ID=""
+    export AWS_ACCOUNT_ALIAS=""
+    export AWS_IAM_USERNAME=""
+    export AWS_ACCESS_KEY_ID=""
+    export AWS_SECRET_ACCESS_KEY=""
+    export AWS_DEFAULT_REGION=""
+    export AWS_REGION="$AWS_DEFAULT_REGION"
 fi
 
-################################################################################################# Aliases
-# -F configfile
-alias ssh='ssh -F $WORKDIR/.ssh/config'
+if [ "$GCP" -eq 1 ]; then
+    ####################################### GCP credentials
+    # GCP gcloud Cli env values
+    # CLOUDSDK_SECTION_NAME_PROPERTY_NAME
+    export CLOUDSDK_ACTIVE_CONFIG_NAME=
+    export CLOUDSDK_CORE_ACCOUNT=
+    export CLOUDSDK_CORE_PROJECT=
+    export CLOUDSDK_CORE_DISABLE_USAGE_REPORTING=True
+    export CLOUDSDK_COMPUTE_REGION=
+    export CLOUDSDK_COMPUTE_ZONE=
+fi
+
+if [ "$AZURE" -eq 1 ]; then
+    ####################################### Azure credentials
+    # Azure cli env values
+    # AZURE_{section}_{name},
+    # https://docs.microsoft.com/en-us/cli/azure/azure-cli-configuration
+    export AZURE_COLLECT_TELEMETRY=false
+    export AZURE_DEFAULTS_LOCATION=
+    export AZURE_DEFAULTS_GROUPS=
+    export AZURE_DEFAULTS_ACR=
+fi
+
+if [ "$KUBERNETES" -eq 1 ]; then
+    ####################################### Kubernetes KUBECONFIG env variable.
+    # Kubernetes
+    ## Append `:$HOME/.kube/config:$KUBECONFIG` to KUBECONFIG if you want global access
+    export KUBECONFIG=$WORKDIR/.kube.config
+fi
+
+if [ "$ASDF" -eq 1 ]; then
+    ####################################### Tool required
+    # https://asdf-vm.com
+    # if ".tool-versions" file exists, then run the commands "asdf install" "asdf current", to install the tools listed in .tool-versions
+    installASDF
+    if [ -f ".tool-versions" ] && [ -x "$(command -v asdf)" ]; then
+        asdf install
+        asdf current
+    fi
+fi
+
+if [ "$ARKADE" -eq 1 ]; then
+    ####################################### User want to use Arkade
+    # https://github.com/alexellis/arkade
+    installArkade
+    if [ "$KUBERNETES" -eq 1 ]; then
+        arkade get \
+                    kind \
+                    kubectl \
+                    helm \
+                    popeye
+    fi
+fi
+
+installArkade() {
+    if [ ! -x "$(command -v arkade)" ]; then
+        curl -sLS https://get.arkade.dev | sudo sh
+    fi
+}
+installASDF() {
+    if [ ! -x "$(command -v arkade)" ]; then
+        curl -sLS https://get.arkade.dev | sudo sh
+    fi
+}

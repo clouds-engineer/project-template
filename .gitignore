@@ -1,19 +1,32 @@
+# https://git-scm.com/docs/gitignore
+# https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository#_ignoring
+# https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+# 
+
+# Files ending with ~
+*~
 # Project wide SSH config/keys etc
-.ssh/**
-!.ssh/.gitkeep
-!.ssh/config
+**/.ssh
+!**/.ssh/.gitkeep
+!**/.ssh/config
 
 # Project wide credentials etc
-.vault/**
-!.vault/.gitkeep
+**/.vault
+!**/.vault/.gitkeep
 
 # Project wide source code repositories
-src/**
+**/src
 !src/.gitkeep
 
 # Temporary files
-tmp
+**/*tmp*
+**/*cache*
+**/*output*
+!**/output/.gitkeep
+**/*backup*
 
 # Environment value files
-.envrc
-.env
+**/.env
+**/.env.local
+**/.envrc
+**/.envrc.local
