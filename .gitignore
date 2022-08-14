@@ -1,7 +1,9 @@
 # https://git-scm.com/docs/gitignore
 # https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository#_ignoring
 # https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-# 
+
+# List of templates
+# https://github.com/github/gitignore
 
 # Files ending with ~
 *~
@@ -21,9 +23,11 @@
 # Temporary files
 **/*tmp*
 **/*cache*
+**/*log*
 **/*output*
 !**/output/.gitkeep
 **/*backup*
+
 
 # Environment value files
 **/.env

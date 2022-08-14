@@ -5,7 +5,7 @@ git clone --depth=1 "$PROJECT_TEMPLATE_REPO" "${PROJECT_DIR}"
 cd "${PROJECT_DIR}" || exit 1
 
 ###############################################################################
-# Remove ".git" folder recusrively
+# Remove ".git" folder recursively
 rm -rf .git
 # Copy examples to original files, ready to edit.
 cp .envrc.example .envrc
