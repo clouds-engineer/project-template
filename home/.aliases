@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+container_tool=${CONTAINER_TOOL:-"docker"}
+
+
+alias aws='$container_tool run --rm -it -v ~/.aws:/root/.aws $(pwd):/workspace amazon/aws-cli'

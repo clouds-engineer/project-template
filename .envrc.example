@@ -13,50 +13,11 @@ export DOCKER_BUILDKIT=${DOCKER_BUILDKIT:-1}
 ########################################### Project related
 export PROJECT_NAME=${PROJECT_NAME:-$(basename "$WORKDIR")}
 export PROJECT_DIR=$PROJECT_NAME
-########################################### Enable/disable features
-AWS=${AWS:-0}
-GCP=${GCP:-0}
-AZURE=${AZURE:-0}
-KUBERNETES=${KUBERNETES:-0}
-ASDF=${ASDF:-0}
-ARKADE=${ARKADE:-0}
-BUTLER=${BUTLER:-1}
-########################################### Provider Credentials
-if [ "$AWS" -eq 1 ]; then
-    ####################################### AWS credentials
-    # AWS CLI env values
-    export AWS_ACOUNT_ID=""
-    export AWS_ACCOUNT_ALIAS=""
-    export AWS_IAM_USERNAME=""
-    export AWS_ACCESS_KEY_ID=""
-    export AWS_SECRET_ACCESS_KEY=""
-    export AWS_DEFAULT_REGION=""
-    export AWS_REGION="$AWS_DEFAULT_REGION"
-fi
 
-if [ "$GCP" -eq 1 ]; then
-    ####################################### GCP credentials
-    # GCP gcloud Cli env values
-    gcloud config configurations activate "$PROJECT_NAME"
-    # CLOUDSDK_SECTION_NAME_PROPERTY_NAME
-    export CLOUDSDK_ACTIVE_CONFIG_NAME=
-    export CLOUDSDK_CORE_ACCOUNT=
-    export CLOUDSDK_CORE_PROJECT=
-    export CLOUDSDK_CORE_DISABLE_USAGE_REPORTING=True
-    export CLOUDSDK_COMPUTE_REGION=
-    export CLOUDSDK_COMPUTE_ZONE=
-fi
+###########################################################
+export TASKRC="${WORKDIR}/.taskrc"
+export TASKDATA="${WORKDIR}/.task"
 
-if [ "$AZURE" -eq 1 ]; then
-    ####################################### Azure credentials
-    # Azure cli env values
-    # AZURE_{section}_{name},
-    # https://docs.microsoft.com/en-us/cli/azure/azure-cli-configuration
-    export AZURE_COLLECT_TELEMETRY=false
-    export AZURE_DEFAULTS_LOCATION=
-    export AZURE_DEFAULTS_GROUPS=
-    export AZURE_DEFAULTS_ACR=
-fi
 
 if [ "$KUBERNETES" -eq 1 ]; then
     ####################################### Kubernetes KUBECONFIG env variable.
@@ -99,7 +60,7 @@ installArkade() {
     fi
 }
 installASDF() {
-    if [ ! -x "$(command -v arkade)" ]; then
-        curl -sLS https://get.arkade.dev | sudo sh
+    if [ ! -x "$(command -v asdf)" ]; then
+        git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
     fi
 }
